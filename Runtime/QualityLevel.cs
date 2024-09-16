@@ -1,7 +1,6 @@
 using System;
+using System.Collections;
 using System.Text.RegularExpressions;
-using SOSXR.EditorTools;
-using SOSXR.EnhancedLogger;
 using UnityEngine;
 
 
@@ -10,10 +9,17 @@ namespace SOSXR.DeviceDependent
     public class QualityLevel : MonoBehaviour
     {
         [SerializeField] private bool m_debugSimulateTabletInEditor = true;
-        [DisableEditing] [SerializeField] private string[] m_availableQualityLevels;
-        [DisableEditing] [SerializeField] private string m_currentQualityLevel;
-        // [SerializeField] private CurrentDevice m_platform;
-        [DisableEditing] [SerializeField] private string m_defaultQualityLevel = "Quest 2";
+        [SerializeField] private string[] m_availableQualityLevels;
+        [SerializeField] private string m_currentQualityLevel;
+        [SerializeField] private CurrentDevice m_platform;
+        [SerializeField] private string m_defaultQualityLevel = "Quest 2";
+        public bool IsValid { get; private set; }
+
+
+        public void OnValidate()
+        {
+            IsValid = true;
+        }
 
 
         private void Awake()
@@ -24,7 +30,7 @@ namespace SOSXR.DeviceDependent
 
         private void OnEnable()
         {
-            //EventsSystem.DeviceHasBeenSet += ChangeQualityLevel;
+            // EventsSystem.DeviceHasBeenSet += ChangeQualityLevel;
         }
 
 
@@ -44,18 +50,18 @@ namespace SOSXR.DeviceDependent
 
         private void ChangeQualityLevel()
         {
-            //  if (m_debugSimulateTabletInEditor && m_platform.DeviceName == "MBP")
-            //  {
-            //      SetQualityLevel("Galaxy Tab A7", "We're debugging in the editor, and assuming we're simulating the tablet: ");
-            //  }
-            //  else if (IsSMT500Device(m_platform.DeviceName))
-            //  {
-            //      SetQualityLevel("SM-T500", "We set the Quality Settings to SM-T500");
-            //  }
-            //  else if (m_availableQualityLevels.Contains(m_platform.DeviceName))
-            //  {
-            //      SetQualityLevel(m_platform.DeviceName, "We set the Quality Settings to " + m_platform.DeviceName);
-            //  }
+            if (m_debugSimulateTabletInEditor && m_platform.DeviceName == "MBP")
+            {
+                SetQualityLevel("Galaxy Tab A7", "We're debugging in the editor, and assuming we're simulating the tablet: ");
+            }
+            else if (IsSMT500Device(m_platform.DeviceName))
+            {
+                SetQualityLevel("SM-T500", "We set the Quality Settings to SM-T500");
+            }
+            else if (((IList) m_availableQualityLevels).Contains(m_platform.DeviceName))
+            {
+                SetQualityLevel(m_platform.DeviceName, "We set the Quality Settings to " + m_platform.DeviceName);
+            }
         }
 
 
@@ -75,14 +81,14 @@ namespace SOSXR.DeviceDependent
             }
 
             QualitySettings.SetQualityLevel(index);
-            this.Success(successMessage, qualityLevel);
+
             m_currentQualityLevel = m_availableQualityLevels[index];
         }
 
 
         private void OnDisable()
         {
-            //EventsSystem.DeviceHasBeenSet -= ChangeQualityLevel;
+            // EventsSystem.DeviceHasBeenSet -= ChangeQualityLevel;
         }
     }
 }

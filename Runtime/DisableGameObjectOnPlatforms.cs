@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using SOSXR.EnhancedLogger;
 using UnityEngine;
 
 
@@ -20,7 +19,7 @@ namespace SOSXR.SimpleHelpers
         {
             if (m_forceEnableOn && m_forceDisableOn)
             {
-                this.Error("Both forceEnable and forceDisable cannot be true. Use multiple instances of this class in that case.");
+                Debug.LogError("Both forceEnable and forceDisable cannot be true. Use multiple instances of this class in that case.");
 
                 return;
             }
