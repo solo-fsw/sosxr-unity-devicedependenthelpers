@@ -1,4 +1,3 @@
-using SOSXR.ClonedProjectHelpers;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR;
@@ -43,16 +42,10 @@ public class DeviceChecker : MonoBehaviour
         else
         {
             #if UNITY_EDITOR
-            if (ProjectName.FullPath.Contains("clone"))
-            {
-                Debug.Log("We're a clone of the editor");
-                m_isClone?.Invoke();
-            }
-            else
-            {
-                Debug.Log("We're in the editor");
-                m_isEditor?.Invoke();
-            }
+
+            Debug.Log("We're in the editor");
+            m_isEditor?.Invoke();
+
             #endif
         }
 
